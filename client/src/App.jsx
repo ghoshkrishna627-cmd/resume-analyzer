@@ -51,31 +51,7 @@ function App() {
     setLoading(false);
   }
 };
-{loading && (
-  <div style={{ marginTop: "20px" }}>
-    <div
-      style={{
-        background: "#334155",
-        borderRadius: "10px",
-        overflow: "hidden",
-        height: "12px"
-      }}
-    >
-      <div
-        style={{
-          width: `${progress}%`,
-          background: "#38bdf8",
-          height: "100%",
-          transition: "0.3s"
-        }}
-      ></div>
-    </div>
 
-    <p style={{ marginTop: "5px", color: "white" }}>
-      Uploading: {progress}%
-    </p>
-  </div>
-)}
   return (
     <div
   style={{
@@ -159,6 +135,31 @@ function App() {
 >
   {loading ? "Uploading..." : "Upload Resume"}
 </button>
+{loading && (
+  <div style={{ marginTop: "20px" }}>
+    <div
+      style={{
+        background: "#334155",
+        borderRadius: "10px",
+        overflow: "hidden",
+        height: "12px"
+      }}
+    >
+      <div
+        style={{
+          width: `${progress}%`,
+          background: "#38bdf8",
+          height: "100%",
+          transition: "0.3s"
+        }}
+      ></div>
+    </div>
+
+    <p style={{ marginTop: "5px", color: "white" }}>
+      Uploading: {progress}%
+    </p>
+  </div>
+)}
       </div>
 
       {/* Result */}
