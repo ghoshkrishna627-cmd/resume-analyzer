@@ -19,7 +19,7 @@ function App() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/api/resume/upload", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/resume/upload`, {
         method: "POST",
         body: formData,
       });
