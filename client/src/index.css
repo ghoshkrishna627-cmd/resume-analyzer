@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ink-950 text-ink-100 font-body antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* ── Primary Button ── */
+  .btn-primary {
+    @apply bg-acid-400 text-ink-950 font-display font-bold px-6 py-3 rounded-xl
+           hover:bg-acid-500 active:scale-95 transition-all duration-200
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100;
+    font-weight: 700;
+  }
+
+  /* ── Outline Button ── */
+  .btn-outline {
+    @apply border border-ink-600 text-ink-200 font-display px-6 py-3 rounded-xl
+           hover:border-ink-400 hover:text-white transition-all duration-200;
+  }
+
+  /* ── Card ── */
+  .card {
+    @apply bg-ink-900 border border-ink-800 rounded-2xl p-6;
+  }
+
+  /* ── Input Field ── */
+  .input-field {
+    @apply w-full bg-ink-800 border border-ink-700 rounded-xl px-4 py-3
+           text-ink-100 placeholder-ink-500 font-body
+           focus:outline-none focus:border-acid-400 focus:ring-1 focus:ring-acid-400
+           transition-colors duration-200;
+  }
+
+  /* ── Skill Badge ── */
+  .skill-badge {
+    @apply bg-ink-800 border border-ink-700 text-ink-200 text-xs font-mono
+           px-3 py-1.5 rounded-lg;
+  }
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a1f;
+}
+::-webkit-scrollbar-thumb {
+  background: #252550;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #363663;
+}
+
+/* ── Noise Texture Overlay ── */
+.noise-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Upload Drop Zone Glow ── */
+.drop-zone-active {
+  box-shadow: 0 0 0 2px #c8ff3e, 0 0 40px rgba(200, 255, 62, 0.15);
+}
+
+/* ── Animated gradient border ── */
+.gradient-border {
+  position: relative;
+  background: linear-gradient(#0a0a1f, #0a0a1f) padding-box,
+              linear-gradient(135deg, #c8ff3e, #4a4a7d, #c8ff3e) border-box;
+  border: 1px solid transparent;
+}
