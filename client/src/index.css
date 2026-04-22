@@ -45,6 +45,21 @@
     @apply bg-ink-800 border border-ink-700 text-ink-200 text-xs font-mono
            px-3 py-1.5 rounded-lg;
   }
+  .loader {
+  border: 5px solid #334155;
+  border-top: 5px solid #38bdf8;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 }
 
 /* ── Scrollbar ─────────────────────────────────────────── */
