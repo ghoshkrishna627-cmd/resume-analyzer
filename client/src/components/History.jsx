@@ -7,22 +7,27 @@ function History() {
   const [error, setError] = useState(null);
 
   // ✅ FETCH DATA FROM BACKEND
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/resume`);
-        const result = await res.json();
-        setData(result.reverse());
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load history");
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // 🔥 Wake up backend (Render sleeps)
+      await fetch(import.meta.env.VITE_API_URL);
 
-    fetchData();
-  }, []);
+      // 🔥 Actual data fetch
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/resume`);
+      const result = await res.json();
+
+      setData(result.reverse());
+    } catch (err) {
+      console.error(err);
+      setError("Backend waking up... try again in a few seconds");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
 
   // ✅ DELETE FUNCTION
   const handleDelete = async (id) => {
@@ -69,9 +74,12 @@ function History() {
           outline: "none",
         }}
       />
-
-      {/* LOADING */}
-      {loading && <p style={{ color: "gray" }}>Loading history...</p>}
+{/*LOADING*/}
+      {loading && (
+  <div style={{ textAlign: "center", marginTop: "30px" }}>
+    <div className="loader"></div>
+  </div>
+)}
 
       {/* ERROR */}
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -120,18 +128,33 @@ function History() {
               )}
             </div>
 
-            {/* ATS */}
-            <p style={{ marginTop: "10px" }}>
-              <b>📊 ATS Score:</b>{" "}
-              <span
-                style={{
-                  color: item.atsScore > 50 ? "#22c55e" : "#ef4444",
-                  fontWeight: "bold",
-                }}
-              >
-                {item.atsScore}%
-              </span>
-            </p>
+            {/* ATS Progress Bar */}
+<p style={{ marginTop: "10px" }}>
+  <b>📊 ATS Score:</b>
+</p>
+
+<div
+  style={{
+    background: "#334155",
+    borderRadius: "10px",
+    overflow: "hidden",
+    height: "10px",
+    marginTop: "5px"
+  }}
+>
+  <div
+    style={{
+      width: `${item.atsScore}%`,
+      background: item.atsScore > 50 ? "#22c55e" : "#ef4444",
+      height: "100%",
+      transition: "0.5s"
+    }}
+  ></div>
+</div>
+
+<p style={{ fontWeight: "bold", marginTop: "5px" }}>
+  {item.atsScore}%
+</p>
 
             {/* 🤖 AI Suggestions */}
             {item.suggestions?.length > 0 && (

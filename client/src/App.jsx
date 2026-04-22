@@ -5,35 +5,77 @@ function App() {
   const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [progress, setProgress] = useState(0);
   const handleUpload = async () => {
-    if (!file) return alert("Select a file first");
+  if (!file) {
+    alert("Select a file first");
+    return;
+  }
 
-    if (file.type !== "application/pdf") {
-      return alert("Only PDF allowed");
-    }
+  const formData = new FormData();
+  formData.append("resume", file);
 
-    const formData = new FormData();
-    formData.append("resume", file);
+  try {
+    setLoading(true);
+    setProgress(0);
 
-    try {
-      setLoading(true);
+    const xhr = new XMLHttpRequest();
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/resume/upload`, {
-        method: "POST",
-        body: formData,
-      });
+    xhr.open("POST", `${import.meta.env.VITE_API_URL}/resume/upload`);
 
-      const result = await res.json();
+    // 🔥 TRACK PROGRESS
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        setProgress(percent);
+      }
+    };
+
+    xhr.onload = () => {
+      const result = JSON.parse(xhr.responseText);
       setData(result);
-
-    } catch (err) {
-      alert("Upload failed");
-    } finally {
       setLoading(false);
-    }
-  };
+      setProgress(0);
+    };
 
+    xhr.onerror = () => {
+      alert("Upload failed");
+      setLoading(false);
+    };
+
+    xhr.send(formData);
+
+  } catch (error) {
+    console.error(error);
+    alert("Upload failed");
+    setLoading(false);
+  }
+};
+{loading && (
+  <div style={{ marginTop: "20px" }}>
+    <div
+      style={{
+        background: "#334155",
+        borderRadius: "10px",
+        overflow: "hidden",
+        height: "12px"
+      }}
+    >
+      <div
+        style={{
+          width: `${progress}%`,
+          background: "#38bdf8",
+          height: "100%",
+          transition: "0.3s"
+        }}
+      ></div>
+    </div>
+
+    <p style={{ marginTop: "5px", color: "white" }}>
+      Uploading: {progress}%
+    </p>
+  </div>
+)}
   return (
     <div style={{
       minHeight: "100vh",
