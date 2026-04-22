@@ -6,6 +6,7 @@ function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [refresh, setRefresh] = useState(false);
   const handleUpload = async () => {
   if (!file) {
     alert("Select a file first");
@@ -32,12 +33,14 @@ function App() {
     };
 
     xhr.onload = () => {
-      const result = JSON.parse(xhr.responseText);
-      setData(result);
-      setLoading(false);
-      setProgress(0);
-    };
+  const result = JSON.parse(xhr.responseText);
+  setData(result);
+  setLoading(false);
+  setProgress(0);
 
+  // 🔥 ADD THIS LINE HERE
+  setRefresh(prev => !prev);
+};
     xhr.onerror = () => {
       alert("Upload failed");
       setLoading(false);
@@ -219,7 +222,7 @@ function App() {
       )}
 
       {/* History */}
-      <History />
+      <History refresh={refresh} />
     </div>
   );
 }

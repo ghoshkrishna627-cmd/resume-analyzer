@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function History() {
+function History({ refresh }) {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,7 @@ useEffect(() => {
   };
 
   fetchData();
-}, []);
+}, [refresh]);
 
   // ✅ DELETE FUNCTION
   const handleDelete = async (id) => {
