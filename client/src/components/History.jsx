@@ -3,26 +3,45 @@ import { useEffect, useState } from "react";
 function History() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // ✅ FETCH DATA FROM BACKEND
   useEffect(() => {
-    fetch("http://localhost:5000/api/resume")
-      .then(res => res.json())
-      .then(data => setData(data.reverse()))
-      .catch(err => console.log(err));
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/resume`);
+        const result = await res.json();
+        setData(result.reverse());
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load history");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
+  // ✅ DELETE FUNCTION
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this resume?")) return;
 
-    await fetch(`http://localhost:5000/api/resume/${id}`, {
-      method: "DELETE"
-    });
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/resume/${id}`, {
+        method: "DELETE",
+      });
 
-    setData(data.filter(item => item._id !== id));
+      setData(data.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Delete failed");
+    }
   };
 
   // 🔍 SEARCH FILTER
-  const filtered = data.filter(item =>
+  const filtered = data.filter((item) =>
     item.email?.toLowerCase().includes(search.toLowerCase()) ||
     item.skills?.join(" ").toLowerCase().includes(search.toLowerCase())
   );
@@ -47,14 +66,21 @@ function History() {
           border: "none",
           background: "#334155",
           color: "white",
-          outline: "none"
+          outline: "none",
         }}
       />
 
-      {filtered.length === 0 ? (
+      {/* LOADING */}
+      {loading && <p style={{ color: "gray" }}>Loading history...</p>}
+
+      {/* ERROR */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* DATA */}
+      {!loading && filtered.length === 0 ? (
         <p style={{ color: "gray" }}>No results found</p>
       ) : (
-        filtered.map(item => (
+        filtered.map((item) => (
           <div
             key={item._id}
             style={{
@@ -64,12 +90,11 @@ function History() {
               margin: "15px 0",
               borderRadius: "12px",
               boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
-              transition: "0.3s"
             }}
           >
             <p><b>📄 File:</b> {item.fileName}</p>
-            <p><b>📧 Email:</b> {item.email}</p>
-            <p><b>📞 Phone:</b> {item.phone}</p>
+            <p><b>📧 Email:</b> {item.email || "Not found"}</p>
+            <p><b>📞 Phone:</b> {item.phone || "Not found"}</p>
 
             {/* SKILLS */}
             <p style={{ marginTop: "10px" }}><b>🧠 Skills:</b></p>
@@ -84,7 +109,7 @@ function History() {
                       borderRadius: "20px",
                       color: "black",
                       fontSize: "12px",
-                      fontWeight: "bold"
+                      fontWeight: "bold",
                     }}
                   >
                     {s}
@@ -101,7 +126,7 @@ function History() {
               <span
                 style={{
                   color: item.atsScore > 50 ? "#22c55e" : "#ef4444",
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 {item.atsScore}%
@@ -114,9 +139,7 @@ function History() {
                 <b>💡 Suggestions:</b>
                 <ul style={{ paddingLeft: "20px", marginTop: "5px" }}>
                   {item.suggestions.map((s, i) => (
-                    <li key={i} style={{ marginBottom: "4px" }}>
-                      {s}
-                    </li>
+                    <li key={i}>{s}</li>
                   ))}
                 </ul>
               </div>
@@ -133,7 +156,7 @@ function History() {
                 border: "none",
                 borderRadius: "6px",
                 cursor: "pointer",
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
               Delete
