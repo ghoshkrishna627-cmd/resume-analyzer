@@ -77,21 +77,29 @@ function App() {
   </div>
 )}
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "linear-gradient(to right, #0f172a, #020617)",
-      color: "#e2e8f0",
-      padding: "40px",
-      fontFamily: "Segoe UI"
-    }}>
+    <div
+  style={{
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #0f172a, #1e293b, #020617)",
+    backgroundSize: "400% 400%",
+    animation: "gradientMove 10s ease infinite",
+    color: "#e2e8f0",
+    padding: "40px",
+    fontFamily: "Segoe UI"
+  }}
+>
 
-      <h1 style={{
-        textAlign: "center",
-        fontSize: "32px",
-        marginBottom: "30px"
-      }}>
-        📄 Resume Analyzer
-      </h1>
+      <h1
+  style={{
+    textAlign: "center",
+    fontSize: "32px",
+    marginBottom: "30px",
+    color: "#38bdf8",
+    textShadow: "0 0 15px rgba(56,189,248,0.7)"
+  }}
+>
+  🚀 Resume Analyzer
+</h1>
 
       {/* Upload Card */}
       <div style={{
@@ -103,29 +111,54 @@ function App() {
         textAlign: "center",
         boxShadow: "0 8px 20px rgba(0,0,0,0.4)"
       }}>
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{ color: "white" }}
-        />
+        <div
+  style={{
+    padding: "20px",
+    borderRadius: "12px",
+    background: "#1e293b",
+    transition: "0.3s",
+    marginBottom: "15px"
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = "scale(1.02)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = "scale(1)";
+  }}
+>
+  <input
+    type="file"
+    accept="application/pdf"
+    onChange={(e) => setFile(e.target.files[0])}
+  />
+</div>
 
         <br /><br />
 
         <button
-          onClick={handleUpload}
-          style={{
-            padding: "10px 20px",
-            background: "#38bdf8",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            color: "black"
-          }}
-        >
-          {loading ? "Uploading..." : "Upload Resume"}
-        </button>
+  onClick={handleUpload}
+  style={{
+    padding: "12px 24px",
+    background: "#38bdf8",
+    border: "none",
+    borderRadius: "10px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    color: "black",
+    transition: "all 0.3s ease",
+    transform: "scale(1)"
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.transform = "scale(1.08)";
+    e.target.style.boxShadow = "0 10px 25px rgba(56,189,248,0.4)";
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.transform = "scale(1)";
+    e.target.style.boxShadow = "none";
+  }}
+>
+  {loading ? "Uploading..." : "Upload Resume"}
+</button>
       </div>
 
       {/* Result */}
